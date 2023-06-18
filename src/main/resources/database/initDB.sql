@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS country;
+DROP SEQUENCE IF EXISTS country_id_seq;
+CREATE TABLE IF NOT EXISTS country
+(
+    id    INTEGER PRIMARY KEY,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+    name  VARCHAR(200) NOT NULL,
+    lat  FLOAT NOT NULL,
+    lon FLOAT NOT NULL
+    );
+CREATE SEQUENCE country_id_seq START WITH 1 INCREMENT BY 1;
