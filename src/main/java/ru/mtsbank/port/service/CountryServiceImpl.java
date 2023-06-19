@@ -63,7 +63,6 @@ public class CountryServiceImpl implements CountryService {
         criteriaQuery.select(countryRoot);
         Predicate predicateName = criteriaBuilder.notEqual(countryRoot.get("name"), countryName);
         criteriaQuery.where(predicateName);
-        criteriaQuery.orderBy(criteriaBuilder.desc(countryRoot.get("name")));
         return entityManager.createQuery(criteriaQuery)
                 .setFirstResult(0)
                 .setMaxResults(1)
