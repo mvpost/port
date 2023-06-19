@@ -56,17 +56,6 @@ public class CountryServiceImpl implements CountryService {
         return false;
     }
 
-    public List<Country> getNewCountry(String countryName) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Country> criteriaQuery = criteriaBuilder.createQuery(Country.class);
-        Root<Country> countryRoot = criteriaQuery.from(Country.class);
-        criteriaQuery.select(countryRoot);
-        Predicate predicateName = criteriaBuilder.notEqual(countryRoot.get("name"), countryName);
-        criteriaQuery.where(predicateName);
-        criteriaQuery.orderBy(criteriaBuilder.desc(countryRoot.get("name")));
-        return entityManager.createQuery(criteriaQuery).getResultList();
-    }
-
     public Country getRandomCountry(String countryName) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Country> criteriaQuery = criteriaBuilder.createQuery(Country.class);
