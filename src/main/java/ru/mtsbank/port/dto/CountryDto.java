@@ -4,18 +4,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CountryDto {
-    private Integer id;
 
-    private LocalDateTime createdAt;
+    protected Integer id;
 
-    private LocalDateTime updatedAt;
+    protected LocalDateTime createdAt;
+
+    protected LocalDateTime updatedAt;
 
     private String name;
 

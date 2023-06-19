@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.mtsbank.port.dto.CountryDto;
 import ru.mtsbank.port.entity.Country;
+import ru.mtsbank.port.mapper.CountryMapper;
 import ru.mtsbank.port.service.CountryService;
 
 import java.util.List;
@@ -13,6 +15,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CountryController {
     private final CountryService countryService;
+    private final CountryMapper countryMapper;
+
+    /*public CountryController (CountryService countryService) {
+        this.countryService = countryService;
+    }*/
 
     @PostMapping(value = "/country")
     public ResponseEntity<?> create(@RequestBody Country country) {
@@ -23,17 +30,17 @@ public class CountryController {
     @GetMapping(value = "/country")
     public ResponseEntity<List<Country>> read() {
         final List<Country> country = countryService.readAll();
-        return country != null &&  !country.isEmpty()
+        return country != null
                 ? new ResponseEntity<>(country, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "/country/random/{name}")
-    public ResponseEntity<Country> read(@PathVariable(name = "name") String name) {
+    public ResponseEntity<CountryDto> read(@PathVariable(name = "name") String name) {
         final Country country = countryService.getRandomCountry(name);
 
         return country != null
-                ? new ResponseEntity<>(country, HttpStatus.OK)
+                ? new ResponseEntity<>(countryMapper.map(country), HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
