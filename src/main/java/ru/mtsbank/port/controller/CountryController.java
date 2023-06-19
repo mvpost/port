@@ -17,10 +17,6 @@ public class CountryController {
     private final CountryService countryService;
     private final CountryMapper countryMapper;
 
-    /*public CountryController (CountryService countryService) {
-        this.countryService = countryService;
-    }*/
-
     @PostMapping(value = "/country")
     public ResponseEntity<?> create(@RequestBody Country country) {
         countryService.create(country);
@@ -28,10 +24,10 @@ public class CountryController {
     }
 
     @GetMapping(value = "/country")
-    public ResponseEntity<List<Country>> read() {
+    public ResponseEntity<List<CountryDto>> read() {
         final List<Country> country = countryService.readAll();
         return country != null
-                ? new ResponseEntity<>(country, HttpStatus.OK)
+                ? new ResponseEntity<>(countryMapper.map(country), HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
