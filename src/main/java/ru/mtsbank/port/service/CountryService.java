@@ -1,6 +1,6 @@
 package ru.mtsbank.port.service;
 
-import ru.mtsbank.port.model.Country;
+import ru.mtsbank.port.entity.Country;
 
 import java.util.List;
 
@@ -20,9 +20,9 @@ public interface CountryService {
 
     /**
      * Возвращает новую страну
-     * @return объект страны
+     * @return название страны
      */
-    List<Country> getNewCountry(String countryName);
+    Country getRandomCountry(String countryName);
 
     /**
      * Возвращает страну по её ID

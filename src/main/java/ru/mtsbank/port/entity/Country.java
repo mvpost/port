@@ -1,4 +1,4 @@
-package ru.mtsbank.port.model;
+package ru.mtsbank.port.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Setter
 public class Country extends BaseEntity {
     @Id
-    @Column(name = "id")
+    @Column
     @SequenceGenerator(name = "countryIdSeq", sequenceName = "country_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "countryIdSeq")
     private Integer id;
@@ -34,5 +34,4 @@ public class Country extends BaseEntity {
     @NotNull
     @Column(nullable = false)
     private Float lon;
-
 }

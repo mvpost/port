@@ -1,22 +1,18 @@
 package ru.mtsbank.port.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.mtsbank.port.model.Country;
+import ru.mtsbank.port.entity.Country;
 import ru.mtsbank.port.service.CountryService;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class CountryController {
     private final CountryService countryService;
-
-    @Autowired
-    public CountryController(CountryService countryService) {
-        this.countryService = countryService;
-    }
 
     @PostMapping(value = "/country")
     public ResponseEntity<?> create(@RequestBody Country country) {
@@ -32,11 +28,11 @@ public class CountryController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/country/getnew/{name}")
-    public ResponseEntity<List<Country>> read(@PathVariable(name = "name") String name) {
-        final List<Country> country = countryService.getNewCountry(name);
+    @GetMapping(value = "/country/random/{name}")
+    public ResponseEntity<Country> read(@PathVariable(name = "name") String name) {
+        final Country country = countryService.getRandomCountry(name);
 
-        return country != null &&  !country.isEmpty()
+        return country != null
                 ? new ResponseEntity<>(country, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

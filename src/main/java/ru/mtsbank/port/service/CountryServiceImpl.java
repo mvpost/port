@@ -8,10 +8,9 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.mtsbank.port.model.Country;
+import ru.mtsbank.port.entity.Country;
 import ru.mtsbank.port.repository.CountryRepository;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -41,9 +40,6 @@ public class CountryServiceImpl implements CountryService {
     @Override
     public boolean update(Country country, int id) {
         if (countryRepository.existsById(id)) {
-            country.setId(id);
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            country.setUpdatedAt(timestamp);
             countryRepository.save(country);
             return true;
         }
@@ -69,5 +65,19 @@ public class CountryServiceImpl implements CountryService {
         criteriaQuery.where(predicateName);
         criteriaQuery.orderBy(criteriaBuilder.desc(countryRoot.get("name")));
         return entityManager.createQuery(criteriaQuery).getResultList();
+    }
+
+    public Country getRandomCountry(String countryName) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Country> criteriaQuery = criteriaBuilder.createQuery(Country.class);
+        Root<Country> countryRoot = criteriaQuery.from(Country.class);
+        criteriaQuery.select(countryRoot);
+        Predicate predicateName = criteriaBuilder.notEqual(countryRoot.get("name"), countryName);
+        criteriaQuery.where(predicateName);
+        criteriaQuery.orderBy(criteriaBuilder.desc(countryRoot.get("name")));
+        return entityManager.createQuery(criteriaQuery)
+                .setFirstResult(0)
+                .setMaxResults(1)
+                .getSingleResult();
     }
 }

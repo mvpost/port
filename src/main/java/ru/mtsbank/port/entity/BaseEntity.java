@@ -1,42 +1,39 @@
-package ru.mtsbank.port.model;
+package ru.mtsbank.port.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.NoArgsConstructor;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-@NoArgsConstructor
 @MappedSuperclass
 @Getter
 @Setter
-public class BaseEntity {
+public abstract class BaseEntity {
     @Id
     @Column
-    private Integer id;
+    protected Integer id;
 
     @CreationTimestamp
-    @Column(updatable=false)
-    private Date createdAt;
+    @Column
+    protected LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column
-    private Date updatedAt;
+    protected LocalDateTime updatedAt;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BaseEntity that = (BaseEntity) o;
-        return Objects.equals(id, that.id);
+        if (!(o instanceof BaseEntity that)) return false;
+        return id != null && Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(Hibernate.getClass(this), id);
     }
 }
