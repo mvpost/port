@@ -11,15 +11,15 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Entity
-@Table(name = "country")
+@Table(name = "fish")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Getter
 @Setter
-public class Country extends BaseEntity {
+public class Fish extends BaseEntity {
     @Id
     @Column
-    @SequenceGenerator(name = "countryIdSeq", sequenceName = "country_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "countryIdSeq")
+    @SequenceGenerator(name = "fishIdSeq", sequenceName = "fish_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fishIdSeq")
     private Integer id;
 
     @NotBlank
@@ -29,9 +29,5 @@ public class Country extends BaseEntity {
 
     @NotNull
     @Column(nullable = false)
-    private Float lat;
-
-    @NotNull
-    @Column(nullable = false)
-    private Float lon;
+    private Float price;
 }
