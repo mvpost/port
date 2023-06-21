@@ -3,7 +3,6 @@ package ru.mtsbank.port.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
@@ -29,11 +28,11 @@ public abstract class BaseEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof BaseEntity that)) return false;
-        return id != null && Objects.equals(id, that.id);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Hibernate.getClass(this), id);
+        return Objects.hash(id, createdAt, updatedAt);
     }
 }

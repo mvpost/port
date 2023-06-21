@@ -1,35 +1,51 @@
 package ru.mtsbank.port.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.mtsbank.port.entity.Country;
+import ru.mtsbank.port.repository.CountryRepository;
 
 import java.util.List;
 
-public interface CountryService {
+@Service
+public class CountryService {
+
+    @Autowired
+    private CountryRepository countryRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     /**
      * Создает новую страну
      * @param country - страна для создания
      */
-    void create(Country country);
+    public void create(Country country) {
+        countryRepository.save(country);
+    }
 
     /**
      * Возвращает список всех имеющихся стран
      * @return список стран
      */
-    List<Country> readAll();
-
-    /**
-     * Возвращает новую страну
-     * @return название страны
-     */
-    Country getRandomCountry(String countryName);
+    public List<Country> readAll() {
+        return countryRepository.findAll();
+    }
 
     /**
      * Возвращает страну по её ID
      * @param id - ID страны
      * @return - объект страны с заданным ID
      */
-    Country read(int id);
+    public Country read(int id) {
+        return countryRepository.getReferenceById(id);
+    }
 
     /**
      * Обновляет страну с заданным ID,
@@ -38,13 +54,42 @@ public interface CountryService {
      * @param id - id страны, которую нужно обновить
      * @return - true если данные были обновлены, иначе false
      */
-    boolean update(Country country, int id);
+    public boolean update(Country country, int id) {
+        if (countryRepository.existsById(id)) {
+            countryRepository.save(country);
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * Удаляет страну с заданным ID
      * @param id - id страны, которую нужно удалить
      * @return - true если страна была удалена, иначе false
      */
-    boolean delete(int id);
+    public boolean delete(int id) {
+        if (countryRepository.existsById(id)) {
+            countryRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 
+    /**
+     * Возвращает новую страну
+     * @return название страны
+     */
+    public Country getRandomCountry(String countryName) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Country> criteriaQuery = criteriaBuilder.createQuery(Country.class);
+        Root<Country> countryRoot = criteriaQuery.from(Country.class);
+        criteriaQuery.select(countryRoot);
+        Predicate predicateName = criteriaBuilder.notEqual(countryRoot.get("name"), countryName);
+        criteriaQuery.where(predicateName);
+        return entityManager.createQuery(criteriaQuery)
+                .setFirstResult(0)
+                .setMaxResults(1)
+                .getSingleResult();
+    }
 }
