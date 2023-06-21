@@ -1,12 +1,13 @@
 package ru.mtsbank.port.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @MappedSuperclass
 @Getter
@@ -14,6 +15,8 @@ import java.util.Objects;
 public abstract class BaseEntity {
     @Id
     @Column
+    @SequenceGenerator(name = "IdSeq", sequenceName = "id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdSeq")
     protected Integer id;
 
     @CreationTimestamp
@@ -24,15 +27,8 @@ public abstract class BaseEntity {
     @Column
     protected LocalDateTime updatedAt;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof BaseEntity that)) return false;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, createdAt, updatedAt);
-    }
+    @NotBlank
+    @Size(max = 200)
+    @Column(nullable = false)
+    protected String name;
 }

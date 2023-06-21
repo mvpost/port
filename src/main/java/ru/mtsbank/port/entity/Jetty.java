@@ -9,17 +9,17 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Entity
-@Table(name = "country")
+@Table(name = "jetty")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Getter
 @Setter
-public class Country extends BaseEntity {
+public class Jetty extends BaseEntity {
+
+    @NotNull
+    @Column(name = "ships_num", nullable = false)
+    private Short shipsNum;
 
     @NotNull
     @Column(nullable = false)
-    private Float lat;
-
-    @NotNull
-    @Column(nullable = false)
-    private Float lon;
+    private Integer capacity;
 }
