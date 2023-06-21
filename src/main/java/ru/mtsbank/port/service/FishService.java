@@ -36,6 +36,7 @@ public class FishService {
         float fishCost = 0.00f;
 
         if (fishName != null && fishCount != null) {
+
             float fishPrice;
 
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

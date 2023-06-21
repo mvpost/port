@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.mtsbank.port.dto.FishDto;
 import ru.mtsbank.port.entity.Fish;
+import ru.mtsbank.port.mapper.FishMapper;
 import ru.mtsbank.port.request.FishRequest;
 import ru.mtsbank.port.service.FishService;
 
@@ -14,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FishController {
     private final FishService fishService;
+    private final FishMapper fishMapper;
 
     @GetMapping(value = "/fish")
     public ResponseEntity<List<Fish>> read() {
@@ -24,10 +27,12 @@ public class FishController {
     }
 
     @PostMapping (value = "/fish/cost")
-    public ResponseEntity<Float> cost(@RequestBody FishRequest fishRequest) {
-        final Float fishCost = fishService.calcCost(fishRequest.name, fishRequest.count);
-        return fishCost != null
-                ? new ResponseEntity<>(fishCost, HttpStatus.OK)
+    public ResponseEntity<FishDto> cost(@RequestBody FishRequest fishRequest) {
+        final float fishCost = fishService.calcCost(fishRequest.name, fishRequest.count);
+        FishDto fishDto = fishMapper.map(fishRequest);
+        fishDto.setCost(fishCost);
+        return fishCost > 0
+                ? new ResponseEntity<>(fishDto, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
