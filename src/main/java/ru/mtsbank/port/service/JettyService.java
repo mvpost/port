@@ -24,4 +24,7 @@ public class JettyService {
     public List<Jetty> readAll() {
         return jettyRepository.findAll();
     }
+
+    public Jetty read(int id) { return jettyRepository.getReferenceById(id); }
+
 }

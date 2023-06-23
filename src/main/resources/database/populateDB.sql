@@ -9,6 +9,4 @@ INSERT INTO fish VALUES
 (nextval('id_seq'), current_timestamp, current_timestamp, 'Sprat', 10);
 
 INSERT INTO jetty VALUES
-(nextval('id_seq'), current_timestamp, current_timestamp, 'First', 5, 50),
-(nextval('id_seq'), current_timestamp, current_timestamp, 'Second', 10, 100),
-(nextval('id_seq'), current_timestamp, current_timestamp, 'Third', 15, 150);
+(nextval('id_seq'), current_timestamp, current_timestamp, 'First', 3, 10);
