@@ -1,11 +1,5 @@
 package ru.mtsbank.port.service;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.mtsbank.port.entity.Country;
@@ -18,9 +12,6 @@ public class CountryService {
 
     @Autowired
     private CountryRepository countryRepository;
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     /**
      * Создает новую страну
@@ -81,15 +72,6 @@ public class CountryService {
      * @return название страны
      */
     public Country getRandomCountry(String countryName) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Country> criteriaQuery = criteriaBuilder.createQuery(Country.class);
-        Root<Country> countryRoot = criteriaQuery.from(Country.class);
-        criteriaQuery.select(countryRoot);
-        Predicate predicateName = criteriaBuilder.notEqual(countryRoot.get("name"), countryName);
-        criteriaQuery.where(predicateName);
-        return entityManager.createQuery(criteriaQuery)
-                .setFirstResult(0)
-                .setMaxResults(1)
-                .getSingleResult();
+        return countryRepository.findDistinctFirstByNameNotLike(countryName);
     }
 }

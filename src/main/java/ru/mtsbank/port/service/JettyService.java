@@ -13,18 +13,22 @@ import java.util.List;
 public class JettyService {
     @Autowired
     private JettyRepository jettyRepository;
+    /*@PersistenceContext
+    private EntityManager entityManager;*/
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    /**
-     * Возвращает список портов
-     * @return список портов
-     */
     public List<Jetty> readAll() {
         return jettyRepository.findAll();
     }
 
     public Jetty read(int id) { return jettyRepository.getReferenceById(id); }
+
+    public Jetty getByName(String name) { return jettyRepository.findByName(name); }
+
+    public void addShip(String name, Integer capacity) {
+        jettyRepository.setCurrentShipNumber(name);
+        jettyRepository.setCurrentCapacity(name, capacity);
+        System.out.println(jettyRepository.getCurrentShipNumber(name) + " " +
+                jettyRepository.getCurrentCapacity(name));
+    }
 
 }
