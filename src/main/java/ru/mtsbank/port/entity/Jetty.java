@@ -22,4 +22,5 @@ public class Jetty extends BaseEntity {
     @NotNull
     @Column(nullable = false)
     private Integer capacity;
+
 }
