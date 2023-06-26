@@ -31,14 +31,12 @@ public class JettyDao {
         this.shipsCount.getAndIncrement();
         this.capacity.addAndGet(capacity);
         ships.add(shipName);
-        System.out.println(ships);
     }
 
     public void remove(String shipName, Integer capacity) {
         this.shipsCount.getAndDecrement();
         this.capacity.addAndGet(-capacity);
         ships.remove(shipName);
-        System.out.println(ships);
     }
 
     @Override
