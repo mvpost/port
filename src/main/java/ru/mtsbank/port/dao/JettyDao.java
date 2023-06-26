@@ -4,21 +4,48 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
+
 @Getter
 @Setter
 @RequiredArgsConstructor
 public class JettyDao {
     private String name;
-    private Integer ships = 0;
-    private Integer capacity = 0;
     private Short maxShips = 0;
     private Integer maxCapacity = 0;
+    private AtomicInteger shipsCount = new AtomicInteger(0);
+    private AtomicInteger capacity = new AtomicInteger(0);
+    @Getter
+    private ArrayList<String> ships = new ArrayList<>();
+
+    public Integer getShipsCount() {
+        return shipsCount.intValue();
+    }
+
+    public Integer getCapacity() {
+        return capacity.intValue();
+    }
+
+    public void add(String shipName, Integer capacity) {
+        this.shipsCount.getAndIncrement();
+        this.capacity.addAndGet(capacity);
+        ships.add(shipName);
+        System.out.println(ships);
+    }
+
+    public void remove(String shipName, Integer capacity) {
+        this.shipsCount.getAndDecrement();
+        this.capacity.addAndGet(-capacity);
+        ships.remove(shipName);
+        System.out.println(ships);
+    }
 
     @Override
     public String toString() {
         return "JettyDao{" +
                 "name='" + name + '\'' +
-                ", ships=" + ships +
+                ", ships=" + shipsCount +
                 ", capacity=" + capacity +
                 ", maxShips=" + maxShips +
                 ", maxCapacity=" + maxCapacity +
