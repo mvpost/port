@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
@@ -17,7 +19,7 @@ public class JettyDao {
     private AtomicInteger shipsCount = new AtomicInteger(0);
     private AtomicInteger capacity = new AtomicInteger(0);
     @Getter
-    private ArrayList<String> ships = new ArrayList<>();
+    private List<String> ships = Collections.synchronizedList(new ArrayList<>());
 
     public Integer getShipsCount() {
         return shipsCount.intValue();

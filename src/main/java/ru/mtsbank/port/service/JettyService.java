@@ -58,7 +58,6 @@ public class JettyService {
                 jettyDaoList.set(index, jettyDao);
                 System.out.println("Корабль " +  shipName + " разгружается на причале " + jettyDao.getName());
                 unloaded = true;
-                System.out.println(jettyDao);
             } else {
                 if (!unloaded) {
                     lockedJettyCount++;
