@@ -9,8 +9,9 @@ import ru.mtsbank.port.entity.Country;
 import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CountryMapper {
-    @Mapping(target = "id", source = "id")
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     CountryDto map(Country entity);
 
     @IterableMapping(elementTargetType = CountryDto.class)

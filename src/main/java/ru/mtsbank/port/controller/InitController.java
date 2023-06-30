@@ -15,7 +15,7 @@ public class InitController {
 
     private String setLocation(@NotNull String shipType) {
         return switch (shipType) {
-            case "yacht" -> "/country/random/{name}";
+            case "yacht" -> "/country/random/";
             case "boat" -> "/fish/cost";
             case "ship" -> "/jetty";
             default -> "";
