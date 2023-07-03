@@ -61,5 +61,6 @@ public class JettyController {
         FileOutputStream fileOutputStream = new FileOutputStream(convertFile);
         fileOutputStream.write(file.getBytes());
         fileOutputStream.close();
+        return "File is upload successfully";
     }
 }
