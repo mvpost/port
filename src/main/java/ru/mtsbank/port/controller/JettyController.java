@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.mtsbank.port.dao.JettyDao;
+import ru.mtsbank.port.bo.JettyBO;
 import ru.mtsbank.port.entity.Jetty;
 import ru.mtsbank.port.request.ShipRequest;
 import ru.mtsbank.port.service.JettyService;
@@ -31,10 +31,10 @@ public class JettyController {
     }
 
     @GetMapping(value = "/jetty/state/{name}")
-    public ResponseEntity<JettyDao> read(@PathVariable(name = "name") String name) {
-        final JettyDao jettyDao = jettyService.getState(name);
-        return jettyDao != null
-                ? new ResponseEntity<>(jettyDao, HttpStatus.OK)
+    public ResponseEntity<JettyBO> read(@PathVariable(name = "name") String name) {
+        final JettyBO jettyBO = jettyService.getState(name);
+        return jettyBO != null
+                ? new ResponseEntity<>(jettyBO, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 

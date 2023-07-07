@@ -1,4 +1,4 @@
-package ru.mtsbank.port.dao;
+package ru.mtsbank.port.bo;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class JettyDao {
+public class JettyBO {
     private String name;
     private volatile Short maxShips = 0;
     private volatile Integer maxCapacity = 0;
