@@ -18,7 +18,7 @@ public class FishController {
     private final FishService fishService;
     private final FishMapper fishMapper;
 
-    @GetMapping(value = "/fish")
+    @GetMapping(value = "/fishes")
     public ResponseEntity<List<Fish>> read() {
         final List<Fish> fish = fishService.readAll();
         return fish != null
@@ -26,7 +26,7 @@ public class FishController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping (value = "/fish/cost")
+    @PostMapping (value = "/fishes/cost")
     public ResponseEntity<FishDto> cost(@RequestBody FishRequest fishRequest) {
         final float fishCost = fishService.calcCost(fishRequest.name, fishRequest.count);
         FishDto fishDto = fishMapper.map(fishRequest);

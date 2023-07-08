@@ -17,13 +17,13 @@ public class CountryController {
     private final CountryService countryService;
     private final CountryMapper countryMapper;
 
-    @PostMapping(value = "/country")
+    @PostMapping(value = "/countries")
     public ResponseEntity<?> create(@RequestBody Country country) {
         countryService.create(country);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/country")
+    @GetMapping(value = "/countries")
     public ResponseEntity<List<CountryDto>> read() {
         final List<Country> country = countryService.readAll();
         return country != null
@@ -31,7 +31,7 @@ public class CountryController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/country/random/{name}")
+    @GetMapping(value = "/countries/random/{name}")
     public ResponseEntity<CountryDto> read(@PathVariable(name = "name") String name) {
         final Country country = countryService.getRandomCountry(name);
 
@@ -40,7 +40,7 @@ public class CountryController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/country/{id}")
+    @GetMapping(value = "/countries/{id}")
     public ResponseEntity<Country> read(@PathVariable(name = "id") int id) {
         final Country country = countryService.read(id);
 
@@ -49,7 +49,7 @@ public class CountryController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping(value = "/country/{id}")
+    @PutMapping(value = "/countries/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody Country country) {
         final boolean updated = countryService.update(country, id);
 

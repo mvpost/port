@@ -1,99 +1,82 @@
 package ru.mtsbank.port.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.mtsbank.port.bo.JettyBO;
+import ru.mtsbank.port.model.JettyModel;
 import ru.mtsbank.port.entity.Jetty;
 import ru.mtsbank.port.repository.JettyRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
-
 @Service
+@Slf4j
 public class JettyService {
     @Autowired
     private JettyRepository jettyRepository;
-    private final List<JettyBO> jettyBOList = Collections.synchronizedList(new ArrayList<>());
-    private final ReentrantLock reLock = new ReentrantLock(true);
+    private final List<JettyModel> jettyModelList = Collections.synchronizedList(new ArrayList<>());
 
     private void initList() {
         List<Jetty> jettyList = jettyRepository.findAll();
-        reLock.lock();
-        try {
-            for (Jetty jetty : jettyList) {
-                JettyBO jettyBO = new JettyBO();
-                jettyBO.setName(jetty.getName());
-                jettyBO.setMaxShips(jetty.getShipsNum());
-                jettyBO.setMaxCapacity(jetty.getCapacity());
-                jettyBOList.add(jettyBO);
-            }
-        } finally {
-            reLock.unlock();
+        for (Jetty jetty : jettyList) {
+            JettyModel jettyModel = new JettyModel();
+            jettyModel.setName(jetty.getName());
+            jettyModel.setMaxShips(jetty.getShipsNum());
+            jettyModel.setMaxCapacity(jetty.getCapacity());
+            jettyModelList.add(jettyModel);
         }
     }
 
-    public List<Jetty> readAll() {
-        return jettyRepository.findAll();
-    }
-
-    public JettyBO getState(String name) {
-        JettyBO jettyBOState = new JettyBO();
-        if (jettyBOList.isEmpty()) { initList(); }
-        for (JettyBO jettyBO : jettyBOList) {
-            if (jettyBO.getName().equals(name)) {
-                jettyBOState = jettyBO;
+    private synchronized void addToList(String jettyName, Integer capacity) {
+        for (JettyModel jettyModel : jettyModelList) {
+            if (jettyModel.getName().equals(jettyName)) {
+                int index = jettyModelList.indexOf(jettyModel);
+                jettyModel.setShipsCount(jettyModel.getShipsCount() + 1);
+                jettyModel.setCapacity(jettyModel.getCapacity() + capacity);
+                jettyModelList.set(index, jettyModel);
             }
         }
-        return jettyBOState;
     }
 
-    public Boolean addShip(String shipName, Integer capacity) {
-        reLock.lock();
-        try {
-            boolean unloaded = false;
-            boolean locked = false;
-            int lockedJettyCount = 0;
+    private synchronized void deleteFromList(String jettyName, Integer capacity){
+        for (JettyModel jettyModel : jettyModelList) {
+            if (jettyModel.getName().equals(jettyName)) {
+                int index = jettyModelList.indexOf(jettyModel);
+                jettyModel.setShipsCount(jettyModel.getShipsCount() - 1);
+                jettyModel.setCapacity(jettyModel.getCapacity() - capacity);
+                jettyModelList.set(index, jettyModel);
+            }
+        }
+    }
 
-            if (jettyBOList.isEmpty()) { initList(); }
+    public List<JettyModel> readAll() {
+        return jettyModelList;
+    }
 
-            for (JettyBO jettyBO : jettyBOList) {
-                if (jettyBO.getShipsCount() < jettyBO.getMaxShips() &&
-                        jettyBO.getCapacity() < jettyBO.getMaxCapacity() &&
-                        !unloaded) {
-                    int index = jettyBOList.indexOf(jettyBO);
-                    jettyBO.add(shipName, capacity);
-                    jettyBOList.set(index, jettyBO);
-                    System.out.println("Корабль " +  shipName + " разгружается на причале " + jettyBO.getName());
-                    unloaded = true;
-                } else {
-                    if (!unloaded) {
-                        lockedJettyCount++;
-                        System.out.println("Причал " + jettyBO.getName() + " занят");
-                        if (lockedJettyCount == jettyBOList.size()) {
-                            locked = true;
-                            System.out.println("Все причалы заняты");
-                        }
-                    }
+    public void addShip(String shipName, Integer capacity) throws Exception {
+        int lockedJettyCount = 0;
+
+        if (jettyModelList.isEmpty()) { initList(); }
+
+        for (JettyModel jettyModel : jettyModelList) {
+            if (jettyModel.getShipsCount() < jettyModel.getMaxShips() &&
+                    jettyModel.getCapacity() < jettyModel.getMaxCapacity()) {
+                addToList(jettyModel.getName(), capacity);
+                log.info("Корабль " +  shipName + " причалил к " + jettyModel.getName());
+
+                Thread.sleep(1000);
+
+                deleteFromList(jettyModel.getName(), capacity);
+                log.info("Корабль " +  shipName + " освободил причал " + jettyModel.getName());
+
+                break;
+            } else {
+                log.info("Причал " + jettyModel.getName() + " занят");
+                if (++lockedJettyCount == jettyModelList.size()) {
+                    throw new Exception("Все причалы заняты");
                 }
             }
-            return locked;
-        } finally {
-            reLock.unlock();
         }
     }
-
-    public Boolean removeShip(String shipName, Integer capacity) {
-        boolean success = false;
-        for (JettyBO jettyBO : jettyBOList) {
-            if (jettyBO.getShips().contains(shipName)) {
-                jettyBO.remove(shipName, capacity);
-                System.out.println("Корабль " + shipName + " покинул причал " + jettyBO.getName());
-                success = true;
-            }
-        }
-        return success;
-    }
-
 }
