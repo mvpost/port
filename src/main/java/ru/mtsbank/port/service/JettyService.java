@@ -3,10 +3,14 @@ package ru.mtsbank.port.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.mtsbank.port.model.JettyModel;
 import ru.mtsbank.port.entity.Jetty;
 import ru.mtsbank.port.repository.JettyRepository;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,11 +54,19 @@ public class JettyService {
         }
     }
 
+    private void downloadFile(MultipartFile file) throws IOException, InterruptedException {
+        File convertFile = new File("/var/tmp/" + file.getName());
+        FileOutputStream fileOutputStream = new FileOutputStream(convertFile);
+        fileOutputStream.write(file.getBytes());
+        fileOutputStream.close();
+        Thread.sleep(1000);
+    }
+
     public List<JettyModel> readAll() {
         return jettyModelList;
     }
 
-    public void addShip(String shipName, Integer capacity) throws Exception {
+    public void addShip(String shipName, Integer capacity, MultipartFile file) throws Exception {
         int lockedJettyCount = 0;
 
         if (jettyModelList.isEmpty()) { initList(); }
@@ -63,16 +75,15 @@ public class JettyService {
             if (jettyModel.getShipsCount() < jettyModel.getMaxShips() &&
                     jettyModel.getCapacity() < jettyModel.getMaxCapacity()) {
                 addToList(jettyModel.getName(), capacity);
-                log.info("Корабль " +  shipName + " причалил к " + jettyModel.getName());
+                log.info("Корабль %s причалил к %s".formatted(shipName, jettyModel.getName()));
 
-                Thread.sleep(1000);
+                downloadFile(file);
 
                 deleteFromList(jettyModel.getName(), capacity);
-                log.info("Корабль " +  shipName + " освободил причал " + jettyModel.getName());
-
+                log.info("Корабль %s освободил причал %s".formatted(shipName, jettyModel.getName()));
                 break;
             } else {
-                log.info("Причал " + jettyModel.getName() + " занят");
+                log.info("Причал %s занят".formatted(jettyModel.getName()));
                 if (++lockedJettyCount == jettyModelList.size()) {
                     throw new Exception("Все причалы заняты");
                 }
