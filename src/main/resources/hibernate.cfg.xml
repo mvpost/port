@@ -17,7 +17,7 @@
         <property name="format_sql">true</property> <!-- Show SQL formatted -->
 
         <mapping class="ru.mtsbank.port.entity.Country"/>
-        <mapping class="ru.mtsbank.port.request.FishRequest"/>
+        <mapping class="ru.mtsbank.port.dto.FishRequest"/>
 
     </session-factory>
 

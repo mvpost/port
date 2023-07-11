@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.mtsbank.port.dto.FishDto;
 import ru.mtsbank.port.entity.Fish;
 import ru.mtsbank.port.mapper.FishMapper;
-import ru.mtsbank.port.request.FishRequest;
+import ru.mtsbank.port.dto.FishRequestDto;
 import ru.mtsbank.port.service.FishService;
 
 import java.util.List;
@@ -27,9 +27,9 @@ public class FishController {
     }
 
     @PostMapping (value = "/fishes/cost")
-    public ResponseEntity<FishDto> cost(@RequestBody FishRequest fishRequest) {
-        final float fishCost = fishService.calcCost(fishRequest.name, fishRequest.count);
-        FishDto fishDto = fishMapper.map(fishRequest);
+    public ResponseEntity<FishDto> cost(@RequestBody FishRequestDto fishRequestDto) {
+        final float fishCost = fishService.calcCost(fishRequestDto.name, fishRequestDto.count);
+        FishDto fishDto = fishMapper.map(fishRequestDto);
         fishDto.setCost(fishCost);
         return fishCost > 0
                 ? new ResponseEntity<>(fishDto, HttpStatus.OK)

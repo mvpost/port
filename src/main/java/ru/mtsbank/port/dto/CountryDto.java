@@ -10,18 +10,12 @@ import java.time.LocalDateTime;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CountryDto {
-
     private Integer id;
-
     private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
-
     private String name;
-
     @JsonProperty("latitude")
     private Float lat;
-
     @JsonProperty("longitude")
     private Float lon;
 }
