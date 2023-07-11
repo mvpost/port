@@ -1,6 +1,5 @@
 package ru.mtsbank.port.controller;
 
-import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +10,7 @@ import java.util.UUID;
 @RestController
 public class InitController {
 
-    private String setLocation(@NotNull String shipType) {
+    private String setLocation(String shipType) {
         return switch (shipType) {
             case "yacht" -> "/countries/random/";
             case "boat" -> "/fishes/cost";
@@ -20,8 +19,8 @@ public class InitController {
         };
     }
 
-    @PostMapping(value = "/init")
-    public ResponseEntity<InitDto> get(@RequestBody @NotNull InitRequestDto initRequestDto) {
+    @PostMapping("/location")
+    public ResponseEntity<InitDto> get(@RequestBody InitRequestDto initRequestDto) {
         UUID uuid = UUID.randomUUID();
         InitDto initDto = new InitDto();
         initDto.setName(initRequestDto.name);

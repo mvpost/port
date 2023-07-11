@@ -2,6 +2,7 @@ package ru.mtsbank.port.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.mtsbank.port.dto.CountryNotFoundException;
 import ru.mtsbank.port.entity.Country;
 import ru.mtsbank.port.repository.CountryRepository;
 
@@ -12,8 +13,8 @@ public class CountryService {
     @Autowired
     CountryRepository countryRepository;
 
-    public void create(Country country) {
-        countryRepository.save(country);
+    public Country create(Country country) {
+        return countryRepository.save(country);
     }
 
     public List<Country> readAll() {
@@ -21,15 +22,30 @@ public class CountryService {
     }
 
     public Country read(int id) {
-        return countryRepository.getReferenceById(id);
+        return countryRepository.findById(id)
+                .orElseThrow(() -> new CountryNotFoundException(id));
     }
 
-    public void update(Country country, int id) {
-        countryRepository.save(country);
+    public Country update(Country newCountry, int id) {
+        return countryRepository.findById(id)
+                .map(country -> {
+                    country.setName(newCountry.getName());
+                    country.setLat(newCountry.getLat());
+                    country.setLon(newCountry.getLon());
+                    return countryRepository.save(country);
+                })
+                .orElseGet(() -> {
+                    newCountry.setId(id);
+                    return countryRepository.save(newCountry);
+                });
     }
 
     public void delete(int id) {
-        countryRepository.deleteById(id);
+        if (countryRepository.existsById(id)) {
+            countryRepository.deleteById(id);
+        } else {
+            throw new CountryNotFoundException(id);
+        }
     }
 
     public Country getRandomCountry(String countryName) {

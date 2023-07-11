@@ -17,22 +17,33 @@ public class CountryController {
     private final CountryService countryService;
     private final CountryMapper countryMapper;
 
-    @PostMapping(value = "/countries")
-    public ResponseEntity<?> create(@RequestBody Country country) {
-        countryService.create(country);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    @GetMapping("/countries")
+    List<Country> read() {
+        return countryService.readAll();
     }
 
-    @GetMapping(value = "/countries")
-    public ResponseEntity<List<CountryDto>> read() {
-        final List<Country> country = countryService.readAll();
-        return country != null
-                ? new ResponseEntity<>(countryMapper.map(country), HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @PostMapping("/countries")
+    Country create(@RequestBody Country country) {
+        return countryService.create(country);
     }
 
-    @GetMapping(value = "/countries/random/{name}")
-    public ResponseEntity<CountryDto> read(@PathVariable(name = "name") String name) {
+    @PutMapping("/countries/{id}")
+    Country update(@RequestBody Country country, @PathVariable int id) {
+        return countryService.update(country, id);
+    }
+
+    @DeleteMapping(value = "/countries/{id}")
+    void delete(@PathVariable(name = "id") int id) {
+        countryService.delete(id);
+    }
+
+    @GetMapping(value = "/countries/{id}")
+    Country read(@PathVariable(name = "id") int id) {
+        return countryService.read(id);
+    }
+
+    @GetMapping("/countries/random/{name}")
+    ResponseEntity<CountryDto> read(@PathVariable(name = "name") String name) {
         final Country country = countryService.getRandomCountry(name);
 
         return country != null
@@ -40,24 +51,4 @@ public class CountryController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/countries/{id}")
-    public ResponseEntity<Country> read(@PathVariable(name = "id") int id) {
-        final Country country = countryService.read(id);
-
-        return country != null
-                ? new ResponseEntity<>(country, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @PutMapping(value = "/countries/{id}")
-    public HttpStatus update(@PathVariable(name = "id") int id, @RequestBody Country country) {
-        countryService.update(country, id);
-        return HttpStatus.OK;
-    }
-
-    @DeleteMapping(value = "/countries/{id}")
-    public HttpStatus delete(@PathVariable(name = "id") int id) {
-        countryService.delete(id);
-        return HttpStatus.OK;
-    }
 }
