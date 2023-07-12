@@ -21,7 +21,7 @@ public class InitController {
     }
 
     @PostMapping("/location")
-    public ResponseEntity<InitDto> get(@RequestBody @Valid InitRequestDto initRequestDto) {
+    private ResponseEntity<InitDto> get(@RequestBody @Valid InitRequestDto initRequestDto) {
         UUID uuid = UUID.randomUUID();
         InitDto initDto = new InitDto();
         initDto.setName(initRequestDto.name);

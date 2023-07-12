@@ -2,8 +2,6 @@ package ru.mtsbank.port.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.mtsbank.port.dto.CountryDto;
 import ru.mtsbank.port.entity.Country;
@@ -44,12 +42,8 @@ public class CountryController {
     }
 
     @GetMapping("/countries/random/{name}")
-    ResponseEntity<CountryDto> read(@PathVariable(name = "name") String name) {
-        final Country country = countryService.getRandomCountry(name);
-
-        return country != null
-                ? new ResponseEntity<>(countryMapper.map(country), HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    CountryDto read(@PathVariable(name = "name") String name) {
+        return countryMapper.map(countryService.getRandomCountry(name));
     }
 
 }
