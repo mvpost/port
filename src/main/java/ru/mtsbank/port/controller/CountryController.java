@@ -1,5 +1,6 @@
 package ru.mtsbank.port.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +24,12 @@ public class CountryController {
     }
 
     @PostMapping("/countries")
-    Country create(@RequestBody Country country) {
+    Country create(@RequestBody @Valid Country country) {
         return countryService.create(country);
     }
 
     @PutMapping("/countries/{id}")
-    Country update(@RequestBody Country country, @PathVariable int id) {
+    Country update(@RequestBody @Valid Country country, @PathVariable int id) {
         return countryService.update(country, id);
     }
 

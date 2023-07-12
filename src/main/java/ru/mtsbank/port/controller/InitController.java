@@ -1,5 +1,6 @@
 package ru.mtsbank.port.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class InitController {
     }
 
     @PostMapping("/location")
-    public ResponseEntity<InitDto> get(@RequestBody InitRequestDto initRequestDto) {
+    public ResponseEntity<InitDto> get(@RequestBody @Valid InitRequestDto initRequestDto) {
         UUID uuid = UUID.randomUUID();
         InitDto initDto = new InitDto();
         initDto.setName(initRequestDto.name);
