@@ -1,6 +1,5 @@
 package ru.mtsbank.port.service;
 
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.mtsbank.port.entity.Fish;
@@ -16,7 +15,7 @@ public class FishService {
         return fishRepository.findAll();
     }
 
-    public Float calcCost(@NotNull String fishName, @NotNull Float fishCount) {
+    public Float calcCost(String fishName, Float fishCount) {
         return fishCount * fishRepository.findDistinctFirstByName(fishName).getPrice();
     }
 }

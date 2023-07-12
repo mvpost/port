@@ -38,7 +38,7 @@ public class CountryController {
     }
 
     @GetMapping(value = "/countries/{id}")
-    Country read(@PathVariable(name = "id") int id) {
+    List<Country> read(@PathVariable(name = "id") int id) {
         return countryService.read(id);
     }
 
