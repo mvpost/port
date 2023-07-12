@@ -32,12 +32,12 @@ public class CountryController {
         return countryService.update(country, id);
     }
 
-    @DeleteMapping(value = "/countries/{id}")
+    @DeleteMapping("/countries/{id}")
     void delete(@PathVariable(name = "id") int id) {
         countryService.delete(id);
     }
 
-    @GetMapping(value = "/countries/{id}")
+    @GetMapping("/countries/{id}")
     List<Country> read(@PathVariable(name = "id") int id) {
         return countryService.read(id);
     }

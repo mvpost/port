@@ -6,10 +6,8 @@ import ru.mtsbank.port.dto.CountryNotFoundException;
 import ru.mtsbank.port.entity.Country;
 import ru.mtsbank.port.repository.CountryRepository;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CountryService {
@@ -25,18 +23,7 @@ public class CountryService {
     }
 
     public List<Country> read(int id) {
-        return countryRepository.findAllById(Collections.singleton(id));
-/*        if (countryRepository.existsById(id)) {
-            List<Country> countries = new ArrayList<>();
-            countries.add(countryRepository.findAllById(id));
-            return countries;
-        } else {
-            throw new CountryNotFoundException(id);
-        }*/
-/*        List<Optional<Country>> countries = new ArrayList<>();
-        countries.add(countryRepository.findById(id));
-        return countryRepository.findById(id)
-                .orElseThrow(() -> new CountryNotFoundException(id));*/
+            return countryRepository.findAllById(Collections.singleton(id));
     }
 
     public Country update(Country newCountry, int id) {
