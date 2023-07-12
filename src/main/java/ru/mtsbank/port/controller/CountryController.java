@@ -32,17 +32,17 @@ public class CountryController {
     }
 
     @DeleteMapping("/countries/{id}")
-    void delete(@PathVariable(name = "id") int id) {
+    void delete(@PathVariable("id") int id) {
         countryService.delete(id);
     }
 
     @GetMapping("/countries/{id}")
-    List<Country> read(@PathVariable(name = "id") int id) {
+    List<Country> read(@PathVariable("id") int id) {
         return countryService.read(id);
     }
 
     @GetMapping("/countries/random/{name}")
-    CountryDto read(@PathVariable(name = "name") String name) {
+    CountryDto read(@PathVariable("name") String name) {
         return countryMapper.map(countryService.getRandomCountry(name));
     }
 
