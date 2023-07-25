@@ -34,10 +34,7 @@ public class CountryService {
                     country.setLon(newCountry.getLon());
                     return countryRepository.save(country);
                 })
-                .orElseGet(() -> {
-                    newCountry.setId(id);
-                    return countryRepository.save(newCountry);
-                });
+                .orElseThrow(() -> new CountryNotFoundException(id));
     }
 
     public void delete(int id) {

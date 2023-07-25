@@ -17,33 +17,33 @@ public class CountryController {
     private final CountryMapper countryMapper;
 
     @GetMapping("/countries")
-    List<Country> read() {
-        return countryService.readAll();
-    }
-
-    @PostMapping("/countries")
-    Country create(@RequestBody @Valid Country country) {
-        return countryService.create(country);
-    }
-
-    @PutMapping("/countries/{id}")
-    Country update(@RequestBody @Valid Country country, @PathVariable int id) {
-        return countryService.update(country, id);
-    }
-
-    @DeleteMapping("/countries/{id}")
-    void delete(@PathVariable("id") int id) {
-        countryService.delete(id);
+    List<CountryDto> read() {
+        return countryMapper.map(countryService.readAll());
     }
 
     @GetMapping("/countries/{id}")
-    List<Country> read(@PathVariable("id") int id) {
-        return countryService.read(id);
+    List<CountryDto> read(@PathVariable("id") int id) {
+        return countryMapper.map(countryService.read(id));
     }
 
     @GetMapping("/countries/random/{name}")
     CountryDto read(@PathVariable("name") String name) {
         return countryMapper.map(countryService.getRandomCountry(name));
+    }
+
+    @PostMapping("/countries")
+    CountryDto create(@RequestBody @Valid Country country) {
+        return countryMapper.map(countryService.create(country));
+    }
+
+    @PutMapping("/countries/{id}")
+    CountryDto update(@RequestBody @Valid Country country, @PathVariable int id) {
+        return countryMapper.map(countryService.update(country, id));
+    }
+
+    @DeleteMapping("/countries/{id}")
+    void delete(@PathVariable("id") int id) {
+        countryService.delete(id);
     }
 
 }
