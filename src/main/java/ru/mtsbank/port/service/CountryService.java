@@ -6,6 +6,7 @@ import ru.mtsbank.port.dto.CountryNotFoundException;
 import ru.mtsbank.port.entity.Country;
 import ru.mtsbank.port.repository.CountryRepository;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class CountryService {
                     country.setName(newCountry.getName());
                     country.setLat(newCountry.getLat());
                     country.setLon(newCountry.getLon());
+                    country.setUpdatedAt(LocalDateTime.now());
                     return countryRepository.save(country);
                 })
                 .orElseThrow(() -> new CountryNotFoundException(id));

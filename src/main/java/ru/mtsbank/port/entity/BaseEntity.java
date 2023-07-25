@@ -20,11 +20,13 @@ public abstract class BaseEntity {
     protected Integer id;
 
     @CreationTimestamp
-    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false)
     protected LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at", nullable = false)
     protected LocalDateTime updatedAt;
 
     @NotBlank

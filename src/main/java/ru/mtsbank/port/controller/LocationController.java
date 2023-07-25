@@ -4,12 +4,11 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.mtsbank.port.dto.InitDto;
-import ru.mtsbank.port.dto.InitRequestDto;
-import java.util.UUID;
+import ru.mtsbank.port.dto.LocationDto;
+import ru.mtsbank.port.dto.LocationRequestDto;
 
 @RestController
-public class InitController {
+public class LocationController {
 
     private String setLocation(String shipType) {
         return switch (shipType) {
@@ -21,12 +20,10 @@ public class InitController {
     }
 
     @PostMapping("/location")
-    private ResponseEntity<InitDto> get(@RequestBody @Valid InitRequestDto initRequestDto) {
-        UUID uuid = UUID.randomUUID();
-        InitDto initDto = new InitDto();
-        initDto.setName(initRequestDto.name);
-        initDto.setGuid(uuid.toString());
-        initDto.setLocation(setLocation(initRequestDto.type));
-        return new ResponseEntity<>(initDto, HttpStatus.OK);
+    private ResponseEntity<LocationDto> get(@RequestBody @Valid LocationRequestDto locationRequestDto) {
+        LocationDto locationDto = new LocationDto();
+        locationDto.setName(locationRequestDto.name);
+        locationDto.setLocation(setLocation(locationRequestDto.type));
+        return new ResponseEntity<>(locationDto, HttpStatus.OK);
     }
 }

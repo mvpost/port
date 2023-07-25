@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class InitRequestDto {
+public class LocationRequestDto {
     public String name;
     public String type;
 }

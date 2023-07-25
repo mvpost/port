@@ -5,8 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class InitDto {
+public class LocationDto {
     private String name;
     private String location;
-    private String guid;
 }

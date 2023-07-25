@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.mtsbank.port.dto.CountryDto;
+import ru.mtsbank.port.dto.CountryNotFoundException;
 import ru.mtsbank.port.entity.Country;
 import ru.mtsbank.port.mapper.CountryMapper;
 import ru.mtsbank.port.service.CountryService;
@@ -37,7 +38,8 @@ public class CountryController {
     }
 
     @PutMapping("/countries/{id}")
-    CountryDto update(@RequestBody @Valid Country country, @PathVariable int id) {
+    CountryDto update(@RequestBody @Valid Country country, @PathVariable int id)
+            throws CountryNotFoundException {
         return countryMapper.map(countryService.update(country, id));
     }
 
