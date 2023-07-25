@@ -44,7 +44,8 @@ public class CountryController {
     }
 
     @DeleteMapping("/countries/{id}")
-    void delete(@PathVariable("id") int id) {
+    void delete(@PathVariable("id") int id)
+            throws CountryNotFoundException {
         countryService.delete(id);
     }
 
