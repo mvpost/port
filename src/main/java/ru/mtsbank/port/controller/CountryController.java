@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.mtsbank.port.dto.CountryDto;
-import ru.mtsbank.port.dto.CountryNotFoundException;
+import ru.mtsbank.port.exception.CountryNotFoundException;
 import ru.mtsbank.port.entity.Country;
 import ru.mtsbank.port.mapper.CountryMapper;
 import ru.mtsbank.port.service.CountryService;

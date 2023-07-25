@@ -2,7 +2,7 @@ package ru.mtsbank.port.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.mtsbank.port.dto.CountryNotFoundException;
+import ru.mtsbank.port.exception.CountryNotFoundException;
 import ru.mtsbank.port.entity.Country;
 import ru.mtsbank.port.repository.CountryRepository;
 

@@ -1,4 +1,4 @@
-package ru.mtsbank.port.dto;
+package ru.mtsbank.port.exception;
 
 public class CountryNotFoundException extends RuntimeException {
     public CountryNotFoundException(int id) {
