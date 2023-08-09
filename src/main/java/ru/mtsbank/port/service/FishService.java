@@ -1,15 +1,16 @@
 package ru.mtsbank.port.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.mtsbank.port.entity.Fish;
 import ru.mtsbank.port.repository.FishRepository;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class FishService {
-    @Autowired
-    FishRepository fishRepository;
+
+    private final FishRepository fishRepository;
 
     public List<Fish> readAll() {
         return fishRepository.findAll();

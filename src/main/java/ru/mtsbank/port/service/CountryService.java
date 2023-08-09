@@ -1,6 +1,6 @@
 package ru.mtsbank.port.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.mtsbank.port.exception.CountryNotFoundException;
 import ru.mtsbank.port.entity.Country;
@@ -11,9 +11,10 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CountryService {
-    @Autowired
-    CountryRepository countryRepository;
+
+    private final CountryRepository countryRepository;
 
     public Country create(Country country) {
         return countryRepository.save(country);
