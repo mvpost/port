@@ -1,7 +1,10 @@
 package ru.mtsbank.port.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.mtsbank.port.dto.CountryDto;
 import ru.mtsbank.port.exception.CountryNotFoundException;
@@ -12,40 +15,41 @@ import ru.mtsbank.port.service.CountryService;
 import java.util.List;
 
 @RestController
+@RequestMapping("/countries")
 @RequiredArgsConstructor
+@Validated
 public class CountryController {
     private final CountryService countryService;
     private final CountryMapper countryMapper;
 
-    @GetMapping("/countries")
+    @GetMapping()
     List<CountryDto> read() {
         return countryMapper.map(countryService.readAll());
     }
 
-    @GetMapping("/countries/{id}")
-    List<CountryDto> read(@PathVariable("id") int id) {
+    @GetMapping("/{id}")
+    List<CountryDto> read(@PathVariable("id") @NotNull Integer id) {
         return countryMapper.map(countryService.read(id));
     }
 
-    @GetMapping("/countries/random/{name}")
-    CountryDto read(@PathVariable("name") String name) {
+    @GetMapping("/random/{name}")
+    CountryDto read(@PathVariable("name") @NotBlank String name) {
         return countryMapper.map(countryService.getRandomCountry(name));
     }
 
-    @PostMapping("/countries")
+    @PostMapping()
     CountryDto create(@RequestBody @Valid Country country) {
         return countryMapper.map(countryService.create(country));
     }
 
-    @PutMapping("/countries/{id}")
-    CountryDto update(@RequestBody @Valid Country country, @PathVariable int id)
+    @PutMapping("/{id}")
+    CountryDto update(@RequestBody @Valid Country country, @PathVariable @NotNull Integer id)
             throws CountryNotFoundException {
         return countryMapper.map(countryService.update(country, id));
     }
 
-    @DeleteMapping("/countries/{id}")
-    void delete(@PathVariable("id") int id)
-            throws CountryNotFoundException {
+    @DeleteMapping("/{id}")
+    void delete(@PathVariable("id") @NotNull Integer id) throws CountryNotFoundException {
         countryService.delete(id);
     }
 
