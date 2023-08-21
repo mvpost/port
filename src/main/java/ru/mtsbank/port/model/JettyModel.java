@@ -1,27 +1,20 @@
 package ru.mtsbank.port.model;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
+@Data
+@Component
 public class JettyModel {
     private String name;
-    private Short maxShips = 0;
+    private Short maxShipsCount = 0;
     private Integer maxCapacity = 0;
-    private Integer shipsCount = 0;
-    private Integer capacity = 0;
-
-    @Override
-    public String toString() {
-        return "JettyModel{" +
-                "name='" + name + '\'' +
-                ", ships=" + shipsCount +
-                ", capacity=" + capacity +
-                ", maxShips=" + maxShips +
-                ", maxCapacity=" + maxCapacity +
-                '}';
-    }
+    private Integer curShipsCount = 0;
+    private Integer curCapacity = 0;
 }
