@@ -11,8 +11,6 @@ import ru.mtsbank.port.model.JettyModelCacheable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
@@ -20,7 +18,6 @@ import java.util.List;
 public class JettyService {
 
     private final JettyModelCacheable jettyModelCacheable;
-    //private List<JettyModel> jettyModelList = Collections.synchronizedList(new ArrayList<>());
 
     private synchronized void takeJetty(String jettyName, Integer capacity) throws Exception {
         JettyModel jettyModel = jettyModelCacheable.fetch().stream()
@@ -52,12 +49,6 @@ public class JettyService {
         Thread.sleep(2000);
     }
 
-    public List<JettyModel> readAll() {
-        //jettyModelList = jettyModelCacheable.fetch();
-
-        return jettyModelCacheable.fetch();
-    }
-
     public String getFreeJettyName(Integer capacity) {
         String freeJettyName = null;
         for (JettyModel jettyModel : jettyModelCacheable.fetch()) {
@@ -85,5 +76,9 @@ public class JettyService {
 
         releaseJetty(jettyName, capacity);
         log.info("Корабль %s освободил причал %s".formatted(shipName, jettyName));
+    }
+
+    public List<JettyModel> readAll() {
+        return jettyModelCacheable.fetch();
     }
 }
