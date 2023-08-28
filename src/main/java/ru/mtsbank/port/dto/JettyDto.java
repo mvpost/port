@@ -9,9 +9,9 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class JettyDto {
     private String name;
-    private Short maxShips = 0;
+    private Short maxShipsCount = 0;
     private Integer maxCapacity = 0;
-    private Integer shipsCount = 0;
-    private Integer capacity = 0;
+    private Integer curShipsCount = 0;
+    private Integer curCapacity = 0;
 }
 

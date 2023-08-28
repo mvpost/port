@@ -6,9 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.mtsbank.port.exception.JettyBusyException;
 import ru.mtsbank.port.model.JettyModel;
-import ru.mtsbank.port.entity.Jetty;
 import ru.mtsbank.port.model.JettyModelCacheable;
-import ru.mtsbank.port.repository.JettyRepository;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,50 +19,10 @@ import java.util.List;
 @Slf4j
 public class JettyService {
 
-    //private final JettyRepository jettyRepository;
     private final JettyModelCacheable jettyModelCacheable;
-    private final List<JettyModel> jettyModelList = Collections.synchronizedList(new ArrayList<>());
-
-    /*private void initList() {
-        List<Jetty> jettyList = jettyRepository.findAll();
-        for (Jetty jetty : jettyList) {
-            JettyModel jettyModel = new JettyModel();
-            jettyModel.setName(jetty.getName());
-            jettyModel.setMaxShips(jetty.getShipsNum());
-            jettyModel.setMaxCapacity(jetty.getCapacity());
-            jettyModelList.add(jettyModel);
-        }
-    }
-
-    private synchronized void addToList(String jettyName, Integer capacity) {
-        for (JettyModel jettyModel : jettyModelList) {
-            if (jettyModel.getName().equals(jettyName)) {
-                int index = jettyModelList.indexOf(jettyModel);
-                jettyModel.setShipsCount(jettyModel.getShipsCount() + 1);
-                jettyModel.setCapacity(jettyModel.getCapacity() + capacity);
-                jettyModelList.set(index, jettyModel);
-            }
-        }
-    }
-
-    private synchronized void deleteFromList(String jettyName, Integer capacity){
-        for (JettyModel jettyModel : jettyModelList) {
-            if (jettyModel.getName().equals(jettyName)) {
-                int index = jettyModelList.indexOf(jettyModel);
-                jettyModel.setCurShipsCount(jettyModel.getMaxShipsCount() - 1);
-                jettyModel.setCurCapacity(jettyModel.getCurCapacity() - capacity);
-                jettyModelList.set(index, jettyModel);
-            }
-        }
-    }*/
+    //private List<JettyModel> jettyModelList = Collections.synchronizedList(new ArrayList<>());
 
     private synchronized void takeJetty(String jettyName, Integer capacity) throws Exception {
-        /*for (JettyModel jettyModel : jettyModelCacheable.fetch()) {
-            if (jettyModel.getName().equals(jettyName)) {
-                jettyModel.setCurShipsCount(jettyModel.getCurShipsCount() + 1);
-                jettyModel.setCurCapacity(jettyModel.getCurCapacity() + capacity);
-            }
-        }*/
         JettyModel jettyModel = jettyModelCacheable.fetch().stream()
                 .filter(j -> j.getName().equals(jettyName))
                 .findAny().orElseThrow(() -> new Exception("Причал " + jettyName + " не найден"));
@@ -95,7 +53,9 @@ public class JettyService {
     }
 
     public List<JettyModel> readAll() {
-        return jettyModelList;
+        //jettyModelList = jettyModelCacheable.fetch();
+
+        return jettyModelCacheable.fetch();
     }
 
     public String getFreeJettyName(Integer capacity) {
@@ -103,8 +63,6 @@ public class JettyService {
         for (JettyModel jettyModel : jettyModelCacheable.fetch()) {
             log.info("Состояние причала %s: кол.-во кораблей: %s, загрузка: %s"
                     .formatted(jettyModel.getName(), jettyModel.getCurShipsCount(), jettyModel.getCurCapacity()));
-            log.info("Максимально на причале %s: кол.-во кораблей: %s, загрузка: %s"
-                    .formatted(jettyModel.getName(), jettyModel.getMaxShipsCount(), jettyModel.getMaxCapacity()));
             if (jettyModel.getCurShipsCount() < jettyModel.getMaxShipsCount() &&
                     jettyModel.getCurCapacity() + capacity <= jettyModel.getMaxCapacity()) {
                 freeJettyName = jettyModel.getName();
@@ -127,47 +85,5 @@ public class JettyService {
 
         releaseJetty(jettyName, capacity);
         log.info("Корабль %s освободил причал %s".formatted(shipName, jettyName));
-
-        /*for (JettyModel jettyModel : jettyModelCacheable.fetch()) {
-            takeJetty(jettyName, capacity);
-            log.info("Корабль %s причалил к %s".formatted(shipName, jettyModel.getName()));
-
-            downloadFile(file);
-
-            releaseJetty(jettyModel.getName(), capacity);
-            log.info("Корабль %s освободил причал %s".formatted(shipName, jettyModel.getName()));
-            break;
-        }*/
     }
-
-    public void addShip(String shipName, Integer capacity, MultipartFile file) throws Exception {
-        String jettyName = getFreeJettyName(capacity);
-        requestJetty(shipName, capacity, jettyName, file);
-
-    }
-
-    /*public void addShip_temp(String shipName, Integer capacity, MultipartFile file) throws Exception {
-        int lockedJettyCount = 0;
-
-        if (jettyModelList.isEmpty()) { initList(); }
-
-        for (JettyModel jettyModel : jettyModelList) {
-            if (jettyModel.getShipsCount() < jettyModel.getMaxShips() &&
-                    jettyModel.getCapacity() < jettyModel.getMaxCapacity()) {
-                addToList(jettyModel.getName(), capacity);
-                log.info("Корабль %s причалил к %s".formatted(shipName, jettyModel.getName()));
-
-                downloadFile(file);
-
-                deleteFromList(jettyModel.getName(), capacity);
-                log.info("Корабль %s освободил причал %s".formatted(shipName, jettyModel.getName()));
-                break;
-            } else {
-                log.info("Причал %s занят".formatted(jettyModel.getName()));
-                if (++lockedJettyCount == jettyModelList.size()) {
-                    throw new Exception("Все причалы заняты");
-                }
-            }
-        }
-    }*/
 }
